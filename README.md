@@ -3,9 +3,12 @@
 This Python script takes two csv files and uses Azure OpenAI (embeddings) to compare a column in each file against each other. This has been tested against Python 3.11.
 
 # Requirements
-Azure OpenAI (default deployment name assumed is `text-embedding-ada-002`)
-Azure OpenAI API Key
-2 csv files
+- Python 3.x
+- OpenAI and Pandas Python modules
+- Azure OpenAI (default deployment name assumed is `text-embedding-ada-002`)
+    - Azure OpenAI API Key
+    - Azure OpenAI endpoint
+- 2 csv files you want to compare
 
 # Install/Usage Instructions (Docker)
 Assuming you have Docker installed...
