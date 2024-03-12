@@ -13,12 +13,12 @@ Assuming you have Docker installed...
 Download this repo's files
 ```bash
 git clone https://github.com/ryandotclair/embeddings.git
+cd embeddings
 ```
 
 Update `app.py`'s lines 14-20's values (threshold to azureDeploymentName)
 
-
-Spin up a python docker container with below one liner from the same directory this (NOTE: updated the [key] and [DEPLOYMENTNAME] values below)
+Spin up a python docker container with below one liner from the same directory as this repo (NOTE: updated the `[key]` and `[DEPLOYMENTNAME]` values first before hitting enter)
 ```bosh
 docker build -t emb-python . && docker run -it --rm -v .:/app -e AZURE_OPENAI_KEY=[key] -e AZURE_OPENAI_APIENDPOINT="https://[DEPLOYMENTNAME].openai.azure.com/" emb-python
 ```
