@@ -29,12 +29,34 @@ cd /app
 pip install -r requirements.txt
 ```
 
-Run the python app (also insid ethe docker container)
+Run the python app (also inside the docker container)
 ```bosh
 python app.py
 ```
 
-After embeddings file has been created, you can comment out (#) lines 96 and 98, and then play with the threashold value (line 14) and output file name (line 19), re-running the script to play with the threashild value.
+Within this same directory, a new csv file will be generated that contains only the matched rows that are similar to one another (based on threashold value and based on the two columns you are comparing), and in a given row you'll see all the values in the first file combined with all the values in the second file.
+
+Using the below example:
+File-1.csv
+CompanyID, CompanyName, Price, Quantity
+202,ACME,12.23,4
+203,Foo,43,1
+
+File-2.csv
+LegalCompanyName, Address, CustomerContact
+ACME Corporation,123 Anvil, Roadrunner
+Bar, 456 lolz, John Smith
+
+Hypothetically we wanted to compare CompanyName and LegalCompanyName, the new output file (against a single match) might look like:
+CompanyID, CompanyName, Price, Quantity, LegalCompanyName, Address, CustomerContact
+202,ACME,12.23,4,ACME Corporation,123 Anvil, Roadrunner
+
+And there would be three new files in the directory:
+File-1-embeddings.csv
+File-2-embeddings.csv
+Compared.csv
+
+After embeddings file has been created, you can comment out (#) lines 96 and 98, and then play with the threashold value (line 14) and possibly output file name (line 19), re-running the script to find the right value for your data set. I highly recommend having an index in your mainFile. It allows you to load multiple "Compared.csv" versions (based on threashold) into Excel and use a simple if/isnumber/match (ex:`=IF(ISNUMBER(MATCH(B4, A4:A200, 0)), "Exists", "Doesn't Exist")`) lookup, against said unique index ID, comparing one threashold output against another, to see what's new/different, assuming you're working with large data sets and variability in the output files.
 
 # Known Behaviors
 - If there's any blank columns in the source data, it can throw the alignment off
