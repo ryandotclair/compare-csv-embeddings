@@ -7,7 +7,7 @@ Azure OpenAI (default deployment name assumed is `text-embedding-ada-002`)
 Azure OpenAI API Key
 2 csv files
 
-# Install Instructions (Docker)
+# Install/Usage Instructions (Docker)
 Assuming you have Docker installed...
 
 Download this repo's files
@@ -22,12 +22,15 @@ Spin up a python docker container with below one liner from the same directory a
 ```bosh
 docker build -t emb-python . && docker run -it --rm -v .:/app -e AZURE_OPENAI_KEY=[key] -e AZURE_OPENAI_APIENDPOINT="https://[DEPLOYMENTNAME].openai.azure.com/" emb-python
 ```
+(Note: this exposes the current directory into the container under /app, so you can pass data in and out of the container. It will also delete the container when you exit the container via `exit` command)
 
 Install required dependencies (run command inside the docker container)
 ```bosh
 cd /app
 pip install -r requirements.txt
 ```
+
+Add the two csv files you want to compare into the embeddings folder.
 
 Run the python app (also inside the docker container)
 ```bosh
@@ -50,17 +53,18 @@ File-2.csv:
     ACME Corporation,123 Anvil, Roadrunner
     Bar, 456 lolz, John Smith
 
-Hypothetically we wanted to compare CompanyName and LegalCompanyName, the new output file (against a single match) might look like:
+Hypothetically we wanted to compare CompanyName and LegalCompanyName. In the app.py we'd set mainFile="File-1.csv", mainFileHeader="CompanyName", secondFile="File-2.csv", secondFileHeader="LegalCompanyName". The new output file (against a single match) might look like:
 
-CompanyID, CompanyName, Price, Quantity, LegalCompanyName, Address, CustomerContact
-202,ACME,12.23,4,ACME Corporation,123 Anvil, Roadrunner
+Compared.csv:
 
-And there would be three new files in the directory:
+    CompanyID, CompanyName, Price, Quantity, LegalCompanyName, Address, CustomerContact
+    202,ACME,12.23,4,ACME Corporation,123 Anvil, Roadrunner
+
+And there would be two other new files in the directory:
 - File-1-embeddings.csv
 - File-2-embeddings.csv
-- Compared.csv
 
-After embeddings file has been created, you can comment out (#) lines 96 and 98, and then play with the threashold value (line 14) and possibly output file name (line 19), re-running the script to find the right value for your data set. I highly recommend having an index in your mainFile. It allows you to load multiple "Compared.csv" versions (based on threashold) into Excel and use a simple if/isnumber/match (ex:`=IF(ISNUMBER(MATCH(B4, A4:A200, 0)), "Exists", "Doesn't Exist")`) lookup, against said unique index ID, comparing one threashold output against another, to see what's new/different, assuming you're working with large data sets and variability in the output files.
+After the embeddings files have been created, you can comment out (#) lines 96 and 98 in the python script, and play with the threashold value (line 14, default .90) and possibly output file name (line 19), re-running the script repeatedly to find the right threashold value for your data set. I highly recommend having an index in your mainFile (in above example, CompanyID being unique). It allows you to load multiple "Compared.csv" versions (based on threashold) into Excel and use a simple if/isnumber/match (ex:`=IF(ISNUMBER(MATCH(B4, A4:A200, 0)), "Exists", "Doesn't Exist")`) lookup, against said unique index ID, comparing one threashold output against another, to see what's new/different, assuming you're working with large data sets and theres variability in the output files across different threasholds.
 
 # Known Behaviors
 - If there's any blank columns in the source data, it can throw the alignment off
