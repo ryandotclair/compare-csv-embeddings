@@ -1,6 +1,6 @@
 # Purpose
 
-This Python script takes two csv files and uses Azure OpenAI (embeddings) to compare a column in each file against each other. This has been tested against Python 3.11.
+This Python script takes two csv files and uses Azure OpenAI (embeddings) to compare a column in each file against each other and generates a third csv file that has only the matches. This has been tested against Python 3.11.
 
 # Requirements
 - Python 3.x
