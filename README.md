@@ -25,12 +25,12 @@ docker build -t emb-python . && docker run -it --rm -v .:/app -e AZURE_OPENAI_KE
 
 Install required dependencies (run command inside the docker container)
 ```bosh
+cd /app
 pip install -r requirements.txt
 ```
 
 Run the python app (also insid ethe docker container)
 ```bosh
-cd /app
 python app.py
 ```
 
