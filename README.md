@@ -2,6 +2,8 @@
 
 This Python script takes two csv files and uses Azure OpenAI (embeddings) to compare a column in each file against each other and generates a third csv file that contains the matches (all columns, appended together). This has been tested against Python 3.11.
 
+Use-case is for any situation where you have slightly different values, from two different sources, but are the same thing and you want them matched. Example: "ACME" vs. "ACME Corporation".
+
 # Requirements
 - Python 3.x
 - OpenAI and Pandas Python modules
